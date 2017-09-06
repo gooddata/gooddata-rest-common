@@ -8,6 +8,7 @@ package com.gooddata;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -44,6 +45,22 @@ public class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFa
      */
     public UriPrefixingClientHttpRequestFactory(final ClientHttpRequestFactory factory, final String uri) {
         this(factory, URI.create(uri));
+    }
+
+    /**
+     * Create an instance that will wrap the given {@link org.springframework.http.client.ClientHttpRequestFactory}
+     * and use the given protocol, hostname and port for all HTTP requests
+     *
+     * @param factory  the factory to be wrapped
+     * @param protocol the protocol for all HTTP requests
+     * @param hostname the hostname for all HTTP requests
+     * @param port     the port for all HTTP requests
+     */
+    UriPrefixingClientHttpRequestFactory(final ClientHttpRequestFactory factory,
+                                         final String protocol,
+                                         final String hostname,
+                                         final int port) {
+        this(factory, UriComponentsBuilder.newInstance().scheme(protocol).host(hostname).port(port).build().toUri());
     }
 
     private UriPrefixingClientHttpRequestFactory(final ClientHttpRequestFactory factory, final UriPrefixer prefixer) {
