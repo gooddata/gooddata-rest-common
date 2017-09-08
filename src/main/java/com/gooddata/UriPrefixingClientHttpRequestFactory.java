@@ -56,10 +56,10 @@ public class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFa
      * @param hostname the hostname for all HTTP requests
      * @param port     the port for all HTTP requests
      */
-    UriPrefixingClientHttpRequestFactory(final ClientHttpRequestFactory factory,
-                                         final String protocol,
-                                         final String hostname,
-                                         final int port) {
+    public UriPrefixingClientHttpRequestFactory(final ClientHttpRequestFactory factory,
+                                                final String protocol,
+                                                final String hostname,
+                                                final int port) {
         this(factory, UriComponentsBuilder.newInstance().scheme(protocol).host(hostname).port(port).build().toUri());
     }
 
