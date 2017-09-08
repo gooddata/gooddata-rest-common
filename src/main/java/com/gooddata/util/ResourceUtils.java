@@ -20,11 +20,11 @@ public class ResourceUtils {
 
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public static <T> T readObjectFromResource(String resourcePath, Class<T> objectClass) {
+    public static <T> T readObjectFromResource(final String resourcePath, final Class<T> objectClass) {
         return readObjectFromResource(ResourceUtils.class, resourcePath, objectClass);
     }
 
-    public static <T> T readObjectFromResource(Class testClass, String resourcePath, Class<T> objectClass) {
+    public static <T> T readObjectFromResource(final Class testClass, final String resourcePath, final Class<T> objectClass) {
         notNull(objectClass, "objectClass");
 
         try {
@@ -34,24 +34,28 @@ public class ResourceUtils {
         }
     }
 
-    public static String readStringFromResource(String resourcePath) {
+    public static String readStringFromResource(final String resourcePath) {
         try {
             return IOUtils.toString(readFromResource(resourcePath),
                     StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new IllegalStateException(format("Cannot read from resource %s", resourcePath), e);
+            throw new IllegalArgumentException("Cannot read from resource: " + resourcePath, e);
         }
     }
 
-    public static InputStream readFromResource(String resourcePath) {
+    public static InputStream readFromResource(final String resourcePath) {
         final Class<?> clazz = ResourceUtils.class;
         return readFromResource(resourcePath, clazz);
     }
 
-    private static InputStream readFromResource(String resourcePath, Class<?> testClass) {
+    public static InputStream readFromResource(final String resourcePath, final Class<?> testClass) {
         notEmpty(resourcePath, "resourcePath");
         notNull(testClass, "testClass");
 
-        return testClass.getResourceAsStream(resourcePath);
+        final InputStream stream = testClass.getResourceAsStream(resourcePath);
+        if (stream == null) {
+            throw new IllegalArgumentException("Resource not found: " + resourcePath);
+        }
+        return stream;
     }
 }
