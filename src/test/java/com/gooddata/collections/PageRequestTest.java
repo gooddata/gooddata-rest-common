@@ -5,6 +5,8 @@
  */
 package com.gooddata.collections;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.testng.annotations.Test;
 
@@ -107,4 +109,13 @@ public class PageRequestTest {
     public void testToString() {
         assertThat(new PageRequest(1, 2).toString(), is("PageRequest[offset=1,limit=2]"));
     }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(PageRequest.class)
+                .withRedefinedSubclass(PageRequestChild.class)
+                .suppress(Warning.NONFINAL_FIELDS) // this is java bean
+                .verify();
+    }
+
 }

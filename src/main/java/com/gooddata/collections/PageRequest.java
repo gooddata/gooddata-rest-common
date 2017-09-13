@@ -114,16 +114,20 @@ public class PageRequest implements Page {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 
+    protected boolean canEqual(final Object o) {
+        return o instanceof PageRequest;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof PageRequest)) return false;
 
         final PageRequest that = (PageRequest) o;
+        if (!(that.canEqual(this))) return false;
 
         if (limit != that.limit) return false;
-        return !(offset != null ? !offset.equals(that.offset) : that.offset != null);
-
+        return offset != null ? offset.equals(that.offset) : that.offset == null;
     }
 
     @Override
