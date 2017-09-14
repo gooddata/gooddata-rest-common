@@ -70,9 +70,9 @@ public class GoodDataRestExceptionTest {
         final GdcError err = readObjectFromResource("/gdc/gdcError.json", GdcError.class);
 
         final GoodDataRestException e = new GoodDataRestException(500, "a123", "message", err);
-        assertThat(e.getMessage(), is("500: [requestId=REQ] MSG"));
+        assertThat(e.getMessage(), is("500: [requestId=REQ] MSG PARAM1 PARAM2"));
         assertThat(e.getStatusCode(), is(500));
-        assertThat(e.getText(), is("MSG"));
+        assertThat(e.getText(), is("MSG PARAM1 PARAM2"));
         assertThat(e.getErrorClass(), is("CLASS"));
         assertThat(e.getComponent(), is("COMPONENT"));
         assertThat(e.getRequestId(), is("REQ"));

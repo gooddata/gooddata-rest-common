@@ -16,6 +16,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UriPrefixerTest {
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldFailOnNullUriPrefix() throws Exception {
+        final URI uri = null;
+        new UriPrefixer(uri);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldFailOnNullStringPrefix() throws Exception {
+        final String uri = null;
+        new UriPrefixer(uri);
+    }
+
+    @Test
+    public void shouldReturnUriPrefix() throws Exception {
+        final UriPrefixer prefixer = new UriPrefixer("foo");
+        assertThat(prefixer.getUriPrefix(), is(URI.create("foo")));
+    }
+
     @Test
     public void testMergeUrisWithSlash() throws Exception {
         final UriPrefixer prefixer = new UriPrefixer("http://localhost:1/uploads");
@@ -65,7 +83,7 @@ public class UriPrefixerTest {
     }
 
     @Test
-    public void shouldName() throws Exception {
+    public void shouldAbsoluteUris() throws Exception {
         final UriPrefixer prefixer = new UriPrefixer("https://localhost:1");
         final URI result = prefixer.mergeUris("http://localhost:1/uploads/test/");
         assertThat(result.toString(), is("https://localhost:1/uploads/test/"));

@@ -21,6 +21,19 @@ import static org.hamcrest.core.Is.is;
 public class PageRequestTest {
 
     @Test
+    public void shouldGetAndSetValues() throws Exception {
+        final PageRequest pageRequest = new PageRequest("foo", 123);
+
+        assertThat(pageRequest.getOffset(), is("foo"));
+        pageRequest.setOffset("bar");
+        assertThat(pageRequest.getOffset(), is("bar"));
+
+        assertThat(pageRequest.getLimit(), is(123));
+        pageRequest.setLimit(987);
+        assertThat(pageRequest.getLimit(), is(987));
+    }
+
+    @Test
     public void testGetPageUri() throws Exception {
         final PageRequest pageRequest = new PageRequest(12, 10);
         final UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("test_uri");

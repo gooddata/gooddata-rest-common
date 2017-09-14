@@ -36,7 +36,7 @@ public class UriPrefixer {
      * @param uriPrefix the URI prefix string
      */
     public UriPrefixer(String uriPrefix) {
-        this(URI.create(uriPrefix));
+        this(URI.create(notNull(uriPrefix, "uriPrefix")));
     }
 
     /**

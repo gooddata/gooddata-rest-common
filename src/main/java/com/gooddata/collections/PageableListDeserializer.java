@@ -5,13 +5,12 @@
  */
 package com.gooddata.collections;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public abstract class PageableListDeserializer<T, E> extends JsonDeserializer<T>
     protected abstract T createList(final List<E> items, final Paging paging, final Map<String, String> links);
 
     @Override
-    public T deserialize(final JsonParser jp, final DeserializationContext context) throws IOException, JsonProcessingException {
+    public T deserialize(final JsonParser jp, final DeserializationContext context) throws IOException {
         final JsonNode root = jp.readValueAsTree();
         if (root == null || root.isNull()) {
             return null;

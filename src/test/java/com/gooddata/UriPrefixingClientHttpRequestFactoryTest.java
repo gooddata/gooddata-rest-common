@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -18,12 +19,22 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UriPrefixingClientHttpRequestFactoryTest {
-    private final ClientHttpRequestFactory requestFactory = new UriPrefixingClientHttpRequestFactory(
-            new SimpleClientHttpRequestFactory(), "http", "localhost", 1234
-    );
 
-    @Test
-    public void createRequest() throws IOException {
+    @DataProvider(name = "factory")
+    public Object[][] createFactories() {
+        final ClientHttpRequestFactory wrapped = new SimpleClientHttpRequestFactory();
+        return new Object[][] {
+                new Object[] {
+                        new UriPrefixingClientHttpRequestFactory(wrapped, "http", "localhost", 1234)
+                },
+                new Object[] {
+                        new UriPrefixingClientHttpRequestFactory(wrapped, "http://localhost:1234")
+                }
+        };
+    }
+
+    @Test(dataProvider = "factory")
+    public void createRequest(final ClientHttpRequestFactory requestFactory) throws IOException {
         final ClientHttpRequest request = requestFactory.createRequest(URI.create("/gdc/resource"), HttpMethod.GET);
         assertThat(request.getURI().toString(), is("http://localhost:1234/gdc/resource"));
     }

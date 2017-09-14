@@ -20,7 +20,7 @@ public class PagingTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final Paging paging = ResourceUtils.readObjectFromResource("/collections/paging.json", Paging.class);
+        final Paging paging = readObjectFromResource("/collections/paging.json", Paging.class);
 
         assertThat(paging.getOffset(), is("0"));
         assertThat(paging.getNext(), notNullValue());
@@ -29,7 +29,7 @@ public class PagingTest {
 
     @Test
     public void testDeserializationNullNext() throws Exception {
-        final Paging paging = ResourceUtils.readObjectFromResource("/collections/paging_no_next.json", Paging.class);
+        final Paging paging = readObjectFromResource("/collections/paging_no_next.json", Paging.class);
 
         assertThat(paging.getOffset(), is("0"));
         assertThat(paging.getNext(), nullValue());
@@ -37,7 +37,7 @@ public class PagingTest {
 
     @Test
     public void testDeserializationWithNextOnly() throws Exception {
-        final Paging paging = ResourceUtils.readObjectFromResource("/collections/paging_only_next.json", Paging.class);
+        final Paging paging = readObjectFromResource("/collections/paging_only_next.json", Paging.class);
 
         assertThat(paging.getOffset(), is(nullValue()));
         assertThat(paging.getNext(), notNullValue());
