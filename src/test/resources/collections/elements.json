@@ -1,0 +1,15 @@
+{
+  "elements": {
+    "items": [
+      "first",
+      "second"
+    ],
+    "paging": {
+      "next": "next"
+    },
+    "links": {
+      "self": "self"
+    }
+  }
+}
+

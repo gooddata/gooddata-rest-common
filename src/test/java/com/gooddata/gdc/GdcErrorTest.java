@@ -21,7 +21,7 @@ public class GdcErrorTest {
         assertThat(err, is(notNullValue()));
         assertThat(err.getErrorClass(), is("CLASS"));
         assertThat(err.getTrace(), is("TRACE"));
-        assertThat(err.getMessage(), is("MSG"));
+        assertThat(err.getMessage(), is("MSG %s %s"));
         assertThat(err.getComponent(), is("COMPONENT"));
         assertThat(err.getErrorId(), is("ID"));
         assertThat(err.getErrorCode(), is("CODE"));
