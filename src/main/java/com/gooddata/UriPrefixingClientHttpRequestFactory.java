@@ -6,6 +6,8 @@
 package com.gooddata;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.AsyncClientHttpRequest;
+import org.springframework.http.client.AsyncClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,11 +18,10 @@ import java.net.URI;
 import static com.gooddata.util.Validate.notNull;
 
 /**
- * Factory for ClientHttpRequest objects.
- * Sets default URI prefix for Spring REST client which by default requires absolute URI.
- * UriPrefixingAsyncClientHttpRequestFactory allows you to specify default hostname and port.
+ * Factory for ClientHttpRequest and AsyncClientHttpRequest objects.
+ * The factory allows you to specify hostname and port for Spring REST client which by default requires absolute URI.
  */
-public class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory {
+public class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory, AsyncClientHttpRequestFactory {
 
     private final ClientHttpRequestFactory wrapped;
     private final UriPrefixer prefixer;
@@ -69,9 +70,25 @@ public class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFa
     }
 
     @Override
-    public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod) throws IOException {
+    public ClientHttpRequest createRequest(final URI uri, final HttpMethod httpMethod) throws IOException {
         final URI merged = prefixer.mergeUris(uri);
         return wrapped.createRequest(merged, httpMethod);
+    }
+
+    /**
+     * If wrapped ClientHttpRequestFactory is not instance of AsyncClientHttpRequestFactory createAsyncRequest
+     * fails with UnsupportedOperationException.
+     *
+     * @throws UnsupportedOperationException if wrapped is not AsyncClientHttpRequestFactory
+     */
+    @Override
+    public AsyncClientHttpRequest createAsyncRequest(final URI uri, final HttpMethod httpMethod) throws IOException {
+        if (wrapped instanceof AsyncClientHttpRequestFactory) {
+            final URI merged = prefixer.mergeUris(uri);
+            return ((AsyncClientHttpRequestFactory) wrapped).createAsyncRequest(merged, httpMethod);
+        } else {
+            throw new UnsupportedOperationException("Wrapped factory has to be instance of AsyncClientHttpRequestFactory to support this method");
+        }
     }
 
 }

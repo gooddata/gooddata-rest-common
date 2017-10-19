@@ -5,7 +5,10 @@
  */
 package com.gooddata;
 
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.AsyncClientHttpRequest;
+import org.springframework.http.client.AsyncClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -22,7 +25,9 @@ public class UriPrefixingClientHttpRequestFactoryTest {
 
     @DataProvider(name = "factory")
     public Object[][] createFactories() {
-        final ClientHttpRequestFactory wrapped = new SimpleClientHttpRequestFactory();
+        final SimpleClientHttpRequestFactory wrapped = new SimpleClientHttpRequestFactory();
+        wrapped.setTaskExecutor(new SimpleAsyncTaskExecutor());
+
         return new Object[][] {
                 new Object[] {
                         new UriPrefixingClientHttpRequestFactory(wrapped, "http", "localhost", 1234)
@@ -37,5 +42,19 @@ public class UriPrefixingClientHttpRequestFactoryTest {
     public void createRequest(final ClientHttpRequestFactory requestFactory) throws IOException {
         final ClientHttpRequest request = requestFactory.createRequest(URI.create("/gdc/resource"), HttpMethod.GET);
         assertThat(request.getURI().toString(), is("http://localhost:1234/gdc/resource"));
+    }
+
+    @Test(dataProvider = "factory")
+    public void createAsyncRequest(final AsyncClientHttpRequestFactory requestFactory) throws IOException {
+        final AsyncClientHttpRequest request = requestFactory.createAsyncRequest(URI.create("/gdc/resource"), HttpMethod.GET);
+        assertThat(request.getURI().toString(), is("http://localhost:1234/gdc/resource"));
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void createAsyncRequest_notAsyncFactory() throws IOException {
+        final ClientHttpRequestFactory wrapped = (uri, httpMethod) -> null;
+        final UriPrefixingClientHttpRequestFactory requestFactory = new UriPrefixingClientHttpRequestFactory(wrapped, "http", "localhost", 1234);
+
+        requestFactory.createAsyncRequest(URI.create("/gdc/resource"), HttpMethod.GET);
     }
 }
