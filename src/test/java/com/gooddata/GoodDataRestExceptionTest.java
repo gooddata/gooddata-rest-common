@@ -17,7 +17,7 @@ public class GoodDataRestExceptionTest {
     @Test
     public void shouldCreateDefaultInstance() throws Exception {
         final GoodDataRestException e = new GoodDataRestException(500, "a123", "message", "component", "gdc.error", "code");
-        assertThat(e.getMessage(), is("500: [requestId=a123] message"));
+        assertThat(e.getMessage(), is("500: [request_id=a123] message"));
         assertThat(e.getStatusCode(), is(500));
         assertThat(e.getRequestId(), is("a123"));
         assertThat(e.getText(), is("message"));
@@ -29,7 +29,7 @@ public class GoodDataRestExceptionTest {
     @Test
     public void shouldCreateDefaultInstanceWithoutErrorCode() throws Exception {
         final GoodDataRestException e = new GoodDataRestException(500, "a123", "message", "component", "gdc.error");
-        assertThat(e.getMessage(), is("500: [requestId=a123] message"));
+        assertThat(e.getMessage(), is("500: [request_id=a123] message"));
         assertThat(e.getStatusCode(), is(500));
         assertThat(e.getRequestId(), is("a123"));
         assertThat(e.getText(), is("message"));
@@ -50,7 +50,7 @@ public class GoodDataRestExceptionTest {
     @Test
     public void shouldCreateInstanceWithNullGdcError() throws Exception {
         final GoodDataRestException e = new GoodDataRestException(500, "a123", "message", null);
-        assertThat(e.getMessage(), is("500: [requestId=a123] message"));
+        assertThat(e.getMessage(), is("500: [request_id=a123] message"));
         assertThat(e.getStatusCode(), is(500));
         assertThat(e.getRequestId(), is("a123"));
         assertThat(e.getText(), is("message"));
@@ -59,7 +59,7 @@ public class GoodDataRestExceptionTest {
     @Test
     public void shouldCreateInstanceWithNullStatusAndGdcError() throws Exception {
         final GoodDataRestException e = new GoodDataRestException(500, "a123", null, null);
-        assertThat(e.getMessage(), is("500: [requestId=a123] Unknown error"));
+        assertThat(e.getMessage(), is("500: [request_id=a123] Unknown error"));
         assertThat(e.getStatusCode(), is(500));
         assertThat(e.getRequestId(), is("a123"));
         assertThat(e.getText(), is(nullValue()));
@@ -70,7 +70,7 @@ public class GoodDataRestExceptionTest {
         final GdcError err = readObjectFromResource("/gdc/gdcError.json", GdcError.class);
 
         final GoodDataRestException e = new GoodDataRestException(500, "a123", "message", err);
-        assertThat(e.getMessage(), is("500: [requestId=REQ] MSG PARAM1 PARAM2"));
+        assertThat(e.getMessage(), is("500: [request_id=REQ] MSG PARAM1 PARAM2"));
         assertThat(e.getStatusCode(), is(500));
         assertThat(e.getText(), is("MSG PARAM1 PARAM2"));
         assertThat(e.getErrorClass(), is("CLASS"));
