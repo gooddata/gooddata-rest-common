@@ -39,7 +39,8 @@
     </developers>
 
     <properties>
-        <jackson.version>2.8.11.1</jackson.version>
+        <jackson.version>2.8.11</jackson.version>
+        <jackson.databind.version>2.8.11.2</jackson.databind.version>
         <spring.version>4.3.1.RELEASE</spring.version>
         <json-unit.version>1.23.0</json-unit.version>
     </properties>
@@ -192,7 +193,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+            <version>${jackson.databind.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
