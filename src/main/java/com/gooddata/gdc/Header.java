@@ -10,7 +10,20 @@ package com.gooddata.gdc;
  */
 public final class Header {
 
+    /**
+     * GoodData vendor specific header containing request identifier unique within GoodData.
+     */
     public static final String GDC_REQUEST_ID = "X-GDC-REQUEST";
+
+    /**
+     * GoodData vendor specific header specifying API version to be used.
+     */
+    public static final String GDC_VERSION = "X-GDC-Version";
+
+    /**
+     * GoodData vendor specific header marking the called resource is in deprecation.
+     */
+    public static final String GDC_DEPRECATED = "X-GDC-DEPRECATED";
 
     private Header() {
         throw new AssertionError("This class is not supposed to be instantiated");
