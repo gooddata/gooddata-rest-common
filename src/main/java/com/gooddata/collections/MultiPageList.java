@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -86,6 +89,7 @@ public class MultiPageList<T> extends PageableList<T> {
 
     /**
      * Signals whether there are more subsequent pages or the last page has been reached
+     *
      * @return true if there are more results to come
      */
     @Override
@@ -126,10 +130,11 @@ public class MultiPageList<T> extends PageableList<T> {
 
     /**
      * Returns size of entire collection across all pages. It will fetch all the pages, so use wisely.
+     *
      * @return size of entire collection across all pages
      */
     public int totalSize() {
-        return (int) stream().count();
+        return stream().mapToInt(__ -> 1).sum();
     }
 
     @Override
