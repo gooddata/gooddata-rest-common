@@ -5,18 +5,18 @@
  */
 package com.gooddata.util;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.joda.time.DateTime;
+
+import java.io.IOException;
 
 import static com.gooddata.util.ISODateTimeSerializer.FORMATTER;
 
 /**
- * Deserializes Joda's {@link DateTime} fields from the ISO date time format in the UTC timezone (yyyy-MM-dd'T'HH:mm:ss.SSSZZ).
+ * Deserialize Joda's {@link DateTime} fields from the ISO date time format in the UTC timezone (yyyy-MM-dd'T'HH:mm:ss.SSSZZ).
  */
 public class ISODateTimeDeserializer extends JsonDeserializer<DateTime> {
 

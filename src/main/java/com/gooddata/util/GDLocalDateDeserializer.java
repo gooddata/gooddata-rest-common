@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import static com.gooddata.util.GDLocalDateSerializer.FORMATTER;
 
 /**
- * Deserializes to JSR 310 {@link LocalDate} fields from the GoodData date time format ({@link DateTimeFormatter#ISO_LOCAL_DATE}).
+ * Deserialize to JSR 310 {@link LocalDate} fields from the GoodData date time format ({@link DateTimeFormatter#ISO_LOCAL_DATE}).
  */
 public class GDLocalDateDeserializer extends JsonDeserializer<LocalDate> {
 

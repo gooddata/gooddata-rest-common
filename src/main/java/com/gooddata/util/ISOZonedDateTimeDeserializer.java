@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 import static com.gooddata.util.ISOZonedDateTimeSerializer.FORMATTER;
 
 /**
- * Deserializes JSR 310 {@link ZonedDateTime} fields from the ISO date time format in the UTC timezone ({@value ISOZonedDateTimeSerializer#DATE_TIME_PATTERN}).
+ * Deserialize JSR 310 {@link ZonedDateTime} fields from the ISO date time format in the UTC timezone ({@value ISOZonedDateTimeSerializer#DATE_TIME_PATTERN}).
  */
 public class ISOZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
 
