@@ -18,7 +18,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import java.io.IOException;
 
 /**
- * Deserializes to Joda's {@link LocalDate} fields from the GoodData date time format (yyyy-MM-dd).
+ * Deserialize to Joda's {@link LocalDate} fields from the GoodData date time format (yyyy-MM-dd).
  */
 public class GDDateDeserializer extends JsonDeserializer<LocalDate> {
 

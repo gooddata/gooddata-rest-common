@@ -21,16 +21,32 @@ class GDDateTimeDeserializerTest extends Specification {
         def json = OBJECT_MAPPER.writeValueAsString(new GDDateTimeClass(dateTime))
 
         when:
-        def date = OBJECT_MAPPER.readValue(json, GDDateTimeClass)
+        def dateClass = OBJECT_MAPPER.readValue(json, GDDateTimeClass)
         def node = OBJECT_MAPPER.readTree(json)
 
         then:
-        date.getDate() == dateTime.withMillisOfSecond(0)
+        dateClass.date == dateTime.withMillisOfSecond(0)
         node.path('date').textValue() == expectedDateTime
 
         where:
         dateTimeZone                        | expectedDateTime
         DateTimeZone.UTC                    | '2012-03-20 14:31:05'
         DateTimeZone.forID("Europe/Prague") | '2012-03-20 13:31:05'
+    }
+
+    @Unroll
+    def "should deserialize with single digit date: #jsonDateTime"() {
+        when:
+        def dateClass = OBJECT_MAPPER.readValue(jsonDateTime, GDDateTimeClass)
+
+        then:
+        dateClass.date.millis == milisFromEpoch
+
+        where:
+        jsonDateTime                     | milisFromEpoch
+        '{"date":"2012-3-2 14:31:05"}'   | 1330698665000
+        '{"date":"2012-03-02 14:31:05"}' | 1330698665000
+        '{"date":"2012-12-30 14:31:05"}' | 1356877865000
+        '{"date":"2012-1-30 14:31:05"}'  | 1327933865000
     }
 }

@@ -14,12 +14,20 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static com.gooddata.util.GDLocalDateSerializer.FORMATTER;
-
 /**
- * Deserializes to JSR 310 {@link LocalDate} fields from the GoodData date time format ({@link DateTimeFormatter#ISO_LOCAL_DATE}).
+ * Deserialize to JSR 310 {@link LocalDate} fields from the GoodData date time format ({@value GDLocalDateDeserializer#DESERIALIZE_PATTERN}).
  */
 public class GDLocalDateDeserializer extends JsonDeserializer<LocalDate> {
+
+    /**
+     * Note that this pattern enable:
+     * - single month/day digit date without 0 padding (1999-2-3)
+     * - double digit date with 0 padding (1999-02-03)
+     * - normal two-digit dates (1999-11-26)
+     */
+    private static final String DESERIALIZE_PATTERN = "yyyy-M-d";
+    
+    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DESERIALIZE_PATTERN);
 
     @Override
     public LocalDate deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {

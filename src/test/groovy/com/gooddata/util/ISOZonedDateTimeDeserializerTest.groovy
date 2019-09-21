@@ -35,4 +35,20 @@ class ISOZonedDateTimeDeserializerTest extends Specification {
         ZoneId.of("UTC")           | '2012-03-20T14:31:05.003Z'
         ZoneId.of("Europe/Prague") | '2012-03-20T13:31:05.003Z'
     }
+
+    @Unroll
+    def "should deserialize with single digit date: #jsonDateTime"() {
+        when:
+        def dateClass = OBJECT_MAPPER.readValue(jsonDateTime, ISOZonedDateTimeClass)
+
+        then:
+        dateClass.date.toInstant().toEpochMilli() == milisFromEpoch
+
+        where:
+        jsonDateTime                          | milisFromEpoch
+        '{"date":"2012-3-2T14:31:05.003Z"}'   | 1330698665003
+        '{"date":"2012-03-02T14:31:05.003Z"}' | 1330698665003
+        '{"date":"2012-12-30T14:31:05.003Z"}' | 1356877865003
+        '{"date":"2012-1-30T14:31:05.003Z"}'  | 1327933865003
+    }
 }

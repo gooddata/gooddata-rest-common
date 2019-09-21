@@ -5,18 +5,18 @@
  */
 package com.gooddata.util;
 
-import static com.fasterxml.jackson.databind.JsonMappingException.from;
-import static com.gooddata.util.Validate.notNull;
-
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 
+import static com.fasterxml.jackson.databind.JsonMappingException.from;
+import static com.gooddata.util.Validate.notNull;
+
 /**
- * Deserializes String or Integer 1 or 0 as boolean
+ * Deserialize String or Integer 1 or 0 as boolean
  */
 public class BooleanDeserializer extends JsonDeserializer<Boolean> {
 

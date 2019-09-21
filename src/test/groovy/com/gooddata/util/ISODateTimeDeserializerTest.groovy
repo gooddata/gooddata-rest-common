@@ -21,16 +21,32 @@ class ISODateTimeDeserializerTest extends Specification {
         def json = OBJECT_MAPPER.writeValueAsString(new ISODateClass(dateTime))
 
         when:
-        def date = OBJECT_MAPPER.readValue(json, ISODateClass)
+        def dateClass = OBJECT_MAPPER.readValue(json, ISODateClass)
         def node = OBJECT_MAPPER.readTree(json)
 
         then:
-        date.date == dateTime
+        dateClass.date == dateTime
         node.path('date').textValue() == expectedDateTime
 
         where:
         dateTimeZone                        | expectedDateTime
         DateTimeZone.UTC                    | '2012-03-20T14:31:05.003Z'
         DateTimeZone.forID("Europe/Prague") | '2012-03-20T13:31:05.003Z'
+    }
+
+    @Unroll
+    def "should deserialize with single digit date: #jsonDateTime"() {
+        when:
+        def dateClass = OBJECT_MAPPER.readValue(jsonDateTime, ISODateClass)
+
+        then:
+        dateClass.date.millis == milisFromEpoch
+
+        where:
+        jsonDateTime                          | milisFromEpoch
+        '{"date":"2012-3-2T14:31:05.003Z"}'   | 1330698665003
+        '{"date":"2012-03-02T14:31:05.003Z"}' | 1330698665003
+        '{"date":"2012-12-30T14:31:05.003Z"}' | 1356877865003
+        '{"date":"2012-1-30T14:31:05.003Z"}'  | 1327933865003
     }
 }

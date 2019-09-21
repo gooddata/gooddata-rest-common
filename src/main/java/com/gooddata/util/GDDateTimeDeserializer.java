@@ -16,7 +16,7 @@ import java.io.IOException;
 import static com.gooddata.util.GDDateTimeSerializer.FORMATTER;
 
 /**
- * Deserializes Joda's {@link DateTime} fields from the GoodData date time format in the UTC timezone (yyyy-MM-dd HH:mm:ss.SSSZ).
+ * Deserialize Joda's {@link DateTime} fields from the GoodData date time format in the UTC timezone (yyyy-MM-dd HH:mm:ss.SSSZ).
  */
 public class GDDateTimeDeserializer extends JsonDeserializer<DateTime> {
 
