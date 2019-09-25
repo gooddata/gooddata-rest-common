@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -18,28 +18,31 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.gooddata.collections.PageableList.ITEMS_NODE;
-import static com.gooddata.collections.PageableList.LINKS_NODE;
-import static com.gooddata.collections.PageableList.PAGING_NODE;
+import static com.gooddata.collections.Page.ITEMS_NODE;
+import static com.gooddata.collections.Page.LINKS_NODE;
+import static com.gooddata.collections.Page.PAGING_NODE;
 import static com.gooddata.util.Validate.notNull;
 
-public abstract class PageableListDeserializer<T, E> extends JsonDeserializer<T> {
+/**
+ * JSON deserializer for {@link Page} objects.
+ */
+public abstract class PageDeserializer<T extends Page<? super E>, E> extends JsonDeserializer<T> {
 
     private static final TypeReference<Map<String, String>> LINKS_TYPE = new TypeReference<Map<String, String>>() {};
 
     private final Class<E> elementType;
     private final String collectionName;
 
-    protected PageableListDeserializer(final Class<E> elementType) {
+    protected PageDeserializer(final Class<E> elementType) {
         this(elementType, ITEMS_NODE);
     }
 
-    protected PageableListDeserializer(final Class<E> elementType, final String collectionName) {
+    protected PageDeserializer(final Class<E> elementType, final String collectionName) {
         this.elementType = notNull(elementType, "elementType");
         this.collectionName = notNull(collectionName, "collectionName");
     }
 
-    protected abstract T createList(final List<E> items, final Paging paging, final Map<String, String> links);
+    protected abstract T createPage(final List<E> items, final Paging paging, final Map<String, String> links);
 
     @Override
     public T deserialize(final JsonParser jp, final DeserializationContext context) throws IOException {
@@ -73,7 +76,7 @@ public abstract class PageableListDeserializer<T, E> extends JsonDeserializer<T>
                 items.add(objectMapper.convertValue(item, elementType));
             }
         }
-        return createList(items, paging, links);
+        return createPage(items, paging, links);
     }
 
 }

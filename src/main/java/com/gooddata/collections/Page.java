@@ -1,49 +1,120 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.collections;
 
-import org.springframework.web.client.RestOperations;
-import org.springframework.web.util.UriComponentsBuilder;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-import java.net.URI;
+import static com.gooddata.util.Validate.notNull;
+import static java.util.Collections.unmodifiableList;
 
 /**
- * Defines logic for generating page URIs.
+ * Wrapper over pageable GDC list.
+ *
+ * @param <E> type of collection elements
  */
-public interface Page {
+public class Page<E> {
+
+    static final String ITEMS_NODE = "items";
+    static final String LINKS_NODE = "links";
+    static final String PAGING_NODE = "paging";
+
+    private final List<E> items;
+    private final Paging paging;
+    private final Map<String, String> links;
 
     /**
-     * Creates {@link URI} for this page request.
-     * <p>
-     * Use {@link #updateWithPageParams(UriComponentsBuilder)} if you have URI template and only want to update it with
-     * page query params.
-     *
-     * @param uriBuilder URI builder used for generating page URI
-     * @return compiled page URI
+     * Creates empty page with no next page.
      */
-    URI getPageUri(final UriComponentsBuilder uriBuilder);
+    public Page() {
+        this(Collections.emptyList(), null);
+    }
 
     /**
-     * Updates provided URI builder query params according to this page configuration.
-     * <p>
-     * As {@link #getPageUri(UriComponentsBuilder)} returns expanded page URI it is not very useful for cases that
-     * require use of URI template with URI variables. This method allows you to use URI templates and benefit
-     * from pagination support implemented in {@link Page} implementations. It is especially useful if you need to handle
-     * multiple requests of the same URI template in the same way - e.g. monitor request made by {@link RestOperations}
-     * methods.
-     * <p>
-     * Use this in the situation when you have URI template with placeholders and URI variables separately.
-     * This method is useful when you have URI template with placeholders and only want to add query parameters based
-     * on this page to it.
-     * <p>
-     * Use {@link #getPageUri(UriComponentsBuilder)} if you want to get concrete page URI and don't have URI template.
+     * Creates page wrapping provided items and next page.
      *
-     * @param uriBuilder URI builder used for constructing page URI
-     * @return provided and updated builder instance
-     * @see RestOperations
+     * @param items  to be wrapped
+     * @param paging page description, might be <code>null</code>
      */
-    UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder);
+    public Page(final List<E> items, final Paging paging) {
+        this(items, paging, null);
+    }
+
+    /**
+     * Creates page wrapping provided items, next page and links.
+     *
+     * @param items  to be wrapped
+     * @param paging page description, might be <code>null</code>
+     * @param links  links, might be <code>null</code>
+     */
+    public Page(final List<E> items, final Paging paging, final Map<String, String> links) {
+        this.items = notNull(items, "items");
+        this.paging = paging;
+        this.links = links;
+    }
+
+    /**
+     * Returns items of this and only this page.
+     *
+     * @return this page items
+     */
+    public List<E> getPageItems() {
+        return unmodifiableList(items);
+    }
+
+    /**
+     * Returns description of the next page.
+     *
+     * @return next page, might be <code>null</code>
+     */
+    public PageRequest getNextPage() {
+        return paging == null ? null : paging.getNext();
+    }
+
+    /**
+     * Signals whether there are more subsequent pages or the last page has been reached
+     *
+     * @return true if there are more results to come
+     */
+    public boolean hasNextPage() {
+        return getNextPage() != null;
+    }
+
+    /**
+     * Returns map of links.
+     *
+     * @return map of links, might be <code>null</code>
+     */
+    public Map<String, String> getLinks() {
+        return links;
+    }
+
+    /**
+     * Returns description of this page.
+     *
+     * @return page description, might be <code>null</code>
+     */
+    public Paging getPaging() {
+        return paging;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Page<?> that = (Page<?>) o;
+        return items.equals(that.items) &&
+                Objects.equals(paging, that.paging) &&
+                Objects.equals(links, that.links);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(items, paging, links);
+    }
 }

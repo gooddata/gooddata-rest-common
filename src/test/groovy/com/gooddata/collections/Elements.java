@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -19,7 +19,7 @@ import java.util.Map;
 @JsonTypeName(Elements.ROOT_NODE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(using = ElementsSerializer.class)
-class Elements extends PageableList<String> {
+class Elements extends Page<String> {
 
     static final String ROOT_NODE = "elements";
 

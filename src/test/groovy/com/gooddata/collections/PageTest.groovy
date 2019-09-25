@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2007-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -13,40 +13,39 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
 
-class PageableListTest extends Specification {
+class PageTest extends Specification {
 
     def "test collection empty"() {
         when:
-        PageableList<Integer> collection = new PageableList<>()
+        Page<Integer> collection = new Page<>()
 
         then:
-        collection.isEmpty()
+        collection.getPageItems().isEmpty()
         collection.nextPage == null
     }
 
     def "test collection"() {
         when:
-        PageableList<Integer> collection = new PageableList<>([1, 2, 3], null)
+        Page<Integer> collection = new Page<>([1, 2, 3], null)
 
         then:
-        collection.size() == 3
+        collection.getPageItems().size() == 3
         collection.nextPage == null
-        collection.currentPageItems == [1, 2, 3]
-        collection.collectAll() == [1, 2, 3]
+        collection.pageItems == [1, 2, 3]
     }
 
     def "test collection with paging"() {
         when:
-        PageableList<Integer> collection = new PageableList<>([1, 2, 3], new Paging('1', 'next'))
+        Page<Integer> collection = new Page<>([1, 2, 3], new Paging('1', 'next'))
 
         then:
-        collection.size() == 3
+        collection.getPageItems().size() == 3
         collection.nextPage?.getPageUri(null)?.toString() == 'next'
     }
 
     def "should verify equals"() {
         expect:
-        EqualsVerifier.forClass(PageableList).usingGetClass().withNonnullFields('items').verify()
+        EqualsVerifier.forClass(Page).usingGetClass().withNonnullFields('items').verify()
     }
 
     def "should deserialize"() {
@@ -58,7 +57,7 @@ class PageableListTest extends Specification {
         elements.links == ['self': 'self']
         elements.paging?.nextUri == 'next'
         elements.hasNextPage()
-        elements as List == ['first', 'second']
+        elements.getPageItems() == ['first', 'second']
     }
 
     def "should serialize"() {

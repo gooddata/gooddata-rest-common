@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2007-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -14,11 +14,11 @@ import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString
 
-class UriPageTest extends Specification {
+class UriPageRequestTest extends Specification {
 
     def "should not construct with null"() {
         when:
-        new UriPage(null)
+        new UriPageRequest(null)
 
         then:
         IllegalArgumentException exc = thrown()
@@ -27,7 +27,7 @@ class UriPageTest extends Specification {
 
     def 'test get page uri'() {
         given:
-        final UriPage uri = new UriPage('uri')
+        final UriPageRequest uri = new UriPageRequest('uri')
 
         expect:
         assertThat(uri.getPageUri(null).toString(), is('uri'))
@@ -36,7 +36,7 @@ class UriPageTest extends Specification {
 
     def "should updateWithPageParams"() {
         given:
-        UriPage uri = new UriPage('uri?offset=god&limit=10')
+        UriPageRequest uri = new UriPageRequest('uri?offset=god&limit=10')
         UriComponentsBuilder builder = fromUriString('/this/is/{template}').query('other=false')
 
         when:
@@ -58,16 +58,16 @@ class UriPageTest extends Specification {
 
     def "should not double encode"() {
         expect:
-        new UriPage('uri?test=foo%20bar').getPageUri(null).toString() == 'uri?test=foo%20bar'
+        new UriPageRequest('uri?test=foo%20bar').getPageUri(null).toString() == 'uri?test=foo%20bar'
     }
 
     def "should verify equals"() {
         expect:
-        EqualsVerifier.forClass(UriPage).usingGetClass().verify()
+        EqualsVerifier.forClass(UriPageRequest).usingGetClass().verify()
     }
 
     def "should have correct toString"() {
         expect:
-        new UriPage('abc').toString() == 'UriPage[pageUri=abc]'
+        new UriPageRequest('abc').toString() == 'UriPageRequest[pageUri=abc]'
     }
 }

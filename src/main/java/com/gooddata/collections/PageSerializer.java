@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -13,24 +13,24 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 
 import java.io.IOException;
 
-import static com.gooddata.collections.PageableList.ITEMS_NODE;
-import static com.gooddata.collections.PageableList.LINKS_NODE;
-import static com.gooddata.collections.PageableList.PAGING_NODE;
+import static com.gooddata.collections.Page.ITEMS_NODE;
+import static com.gooddata.collections.Page.LINKS_NODE;
+import static com.gooddata.collections.Page.PAGING_NODE;
 import static com.gooddata.util.Validate.notEmpty;
 
 /**
- * Serializer {@link PageableList} objects into JSON.
+ * JSON serializer for {@link Page} objects.
  */
-public abstract class PageableListSerializer extends JsonSerializer<PageableList<?>> {
+public abstract class PageSerializer extends JsonSerializer<Page<?>> {
 
     private final String rootNode;
 
-    public PageableListSerializer(String rootNode) {
+    public PageSerializer(String rootNode) {
         this.rootNode = notEmpty(rootNode, "rootNode");
     }
 
     @Override
-    public void serialize(final PageableList<?> value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException {
+    public void serialize(final Page<?> value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException {
         jgen.writeStartObject();
         jgen.writeFieldName(rootNode);
 
@@ -40,7 +40,7 @@ public abstract class PageableListSerializer extends JsonSerializer<PageableList
         jgen.writeStartArray();
         final ObjectCodec codec = jgen.getCodec();
 
-        for (final Object item: value.getCurrentPageItems()) {
+        for (final Object item: value.getPageItems()) {
             codec.writeValue(jgen, item);
         }
         jgen.writeEndArray();
@@ -54,7 +54,7 @@ public abstract class PageableListSerializer extends JsonSerializer<PageableList
     }
 
     @Override
-    public void serializeWithType(final PageableList<?> value, final JsonGenerator gen, final SerializerProvider provider,
+    public void serializeWithType(final Page<?> value, final JsonGenerator gen, final SerializerProvider provider,
                                   final TypeSerializer typeSer) throws IOException {
         serialize(value, gen, provider);
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2007-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -11,13 +11,13 @@ import org.springframework.web.util.UriComponentsBuilder
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.gooddata.collections.PageRequest.DEFAULT_LIMIT
+import static CustomPageRequest.DEFAULT_LIMIT
 
-class PageRequestTest extends Specification {
+class CustomPageRequestTest extends Specification {
 
     def "should get and set values"() {
         when:
-        PageRequest pageRequest = new PageRequest('foo', 123)
+        CustomPageRequest pageRequest = new CustomPageRequest('foo', 123)
 
         then:
         pageRequest.offset == 'foo'
@@ -41,17 +41,17 @@ class PageRequestTest extends Specification {
         pageUri?.toString() == expected
 
         where:
-        type             | pageRequest               || expected
-        'default values' | new PageRequest()         || 'test_uri?limit=100'
-        'int offset'     | new PageRequest(12, 10)   || 'test_uri?offset=12&limit=10'
-        'string offset'  | new PageRequest('17', 10) || 'test_uri?offset=17&limit=10'
+        type             | pageRequest                     || expected
+        'default values' | new CustomPageRequest()         || 'test_uri?limit=100'
+        'int offset'     | new CustomPageRequest(12, 10)   || 'test_uri?offset=12&limit=10'
+        'string offset'  | new CustomPageRequest('17', 10) || 'test_uri?offset=17&limit=10'
     }
 
     @Unroll
     def "should updateWithPageParams with #type offset"() {
         given:
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString('test_uri/{test}')
-        PageRequest pageRequest = new PageRequest(offset, 10)
+        CustomPageRequest pageRequest = new CustomPageRequest(offset, 10)
 
         when:
         UriComponentsBuilder updatedBuilder = pageRequest.updateWithPageParams(uriBuilder)
@@ -71,7 +71,7 @@ class PageRequestTest extends Specification {
 
     def "should get sanitized limit"() {
         expect:
-        new PageRequest(limit).sanitizedLimit == sanitizedLimit
+        new CustomPageRequest(limit).sanitizedLimit == sanitizedLimit
 
         where:
         limit || sanitizedLimit
@@ -82,18 +82,18 @@ class PageRequestTest extends Specification {
 
     def "should get max sanitized limit"() {
         expect:
-        new PageRequest(100).getSanitizedLimit(10) == 10
+        new CustomPageRequest(100).getSanitizedLimit(10) == 10
     }
 
     def "should have correct toString"() {
         expect:
-        new PageRequest(1, 2).toString() == 'PageRequest[offset=1,limit=2]'
+        new CustomPageRequest(1, 2).toString() == 'CustomPageRequest[offset=1,limit=2]'
     }
 
     def "should verify equals"() {
         expect:
-        EqualsVerifier.forClass(PageRequest)
-                .withRedefinedSubclass(PageRequestChild)
+        EqualsVerifier.forClass(CustomPageRequest)
+                .withRedefinedSubclass(CustomPageRequestChild)
                 .suppress(Warning.NONFINAL_FIELDS) // this is java bean
                 .verify()
     }

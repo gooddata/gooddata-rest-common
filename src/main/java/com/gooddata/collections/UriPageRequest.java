@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -18,9 +18,9 @@ import java.util.Map.Entry;
 import static com.gooddata.util.Validate.notNull;
 
 /**
- * {@link Page} implementation wrapping next page link from REST API.
+ * {@link PageRequest} implementation wrapping next page link from REST API.
  */
-class UriPage implements Page {
+class UriPageRequest implements PageRequest {
 
     private final UriComponents pageUri;
 
@@ -29,7 +29,7 @@ class UriPage implements Page {
      *
      * @param pageUri page URI
      */
-    public UriPage(final String pageUri) {
+    public UriPageRequest(final String pageUri) {
         try {
             this.pageUri = UriComponentsBuilder.fromUriString(UriUtils.decode(notNull(pageUri, "pageUri"), "UTF-8")).build();
         } catch (final UnsupportedEncodingException e) {
@@ -74,7 +74,7 @@ class UriPage implements Page {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        final UriPage uriPage = (UriPage) o;
+        final UriPageRequest uriPage = (UriPageRequest) o;
 
         return pageUri != null ? pageUri.equals(uriPage.pageUri) : uriPage.pageUri == null;
     }
