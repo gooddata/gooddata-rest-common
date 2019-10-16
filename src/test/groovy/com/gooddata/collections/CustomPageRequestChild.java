@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.collections;
 
 /**
- * Class for testing {@link PageRequest}'s equals' method inheritance
+ * Class for testing {@link CustomPageRequest}'s equals' method inheritance
  */
-public class PageRequestChild extends PageRequest {
+public class CustomPageRequestChild extends CustomPageRequest {
 
     private String foo;
 
@@ -22,16 +22,16 @@ public class PageRequestChild extends PageRequest {
 
     @Override
     protected boolean canEqual(final Object o) {
-        return o instanceof PageRequestChild;
+        return o instanceof CustomPageRequestChild;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof PageRequestChild)) return false;
+        if (!(o instanceof CustomPageRequestChild)) return false;
         if (!super.equals(o)) return false;
 
-        final PageRequestChild that = (PageRequestChild) o;
+        final CustomPageRequestChild that = (CustomPageRequestChild) o;
         if (!(that.canEqual(this))) return false;
 
         return foo != null ? foo.equals(that.foo) : that.foo == null;

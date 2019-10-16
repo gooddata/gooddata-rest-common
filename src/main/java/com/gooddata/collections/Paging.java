@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -25,12 +25,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class Paging {
 
     private final String offset;
-    private final UriPage next;
+    private final UriPageRequest next;
 
     @JsonCreator
     public Paging(@JsonProperty("offset") final String offset, @JsonProperty("next") final String next) {
         this.offset = offset;
-        this.next = next == null ? null : new UriPage(next);
+        this.next = next == null ? null : new UriPageRequest(next);
     }
 
     public Paging(final String next) {
@@ -43,7 +43,7 @@ public class Paging {
     }
 
     @JsonIgnore
-    public UriPage getNext() {
+    public UriPageRequest getNext() {
         return next;
     }
 

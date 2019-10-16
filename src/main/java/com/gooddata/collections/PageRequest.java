@@ -1,139 +1,49 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.collections;
 
-import com.gooddata.util.GoodDataToStringBuilder;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-import static com.gooddata.util.Validate.notNull;
-
 /**
- * User defined page with desired offset and limit.
+ * Defines logic for generating page URIs.
  */
-public class PageRequest implements Page {
-
-    public static final Integer DEFAULT_LIMIT = 100;
-
-    private String offset;
-    private int limit;
+public interface PageRequest {
 
     /**
-     * Creates new page definition with default values
-     */
-    public PageRequest() {
-        this(null, DEFAULT_LIMIT);
-    }
-
-    /**
-     * Creates new page definition with provided values.
+     * Creates {@link URI} for this page request.
+     * <p>
+     * Use {@link #updateWithPageParams(UriComponentsBuilder)} if you have URI template and only want to update it with
+     * page query params.
      *
-     * @param offset page offset (position in the collection)
-     * @param limit  maximal number of returned elements (on a page)
+     * @param uriBuilder URI builder used for generating page URI
+     * @return compiled page URI
      */
-    public PageRequest(final int offset, final int limit) {
-        this(String.valueOf(offset), limit);
-    }
+    URI getPageUri(final UriComponentsBuilder uriBuilder);
 
     /**
-     * Creates new page definition with provided values.
+     * Updates provided URI builder query params according to this page configuration.
+     * <p>
+     * As {@link #getPageUri(UriComponentsBuilder)} returns expanded page URI it is not very useful for cases that
+     * require use of URI template with URI variables. This method allows you to use URI templates and benefit
+     * from pagination support implemented in {@link PageRequest} implementations. It is especially useful if you need to handle
+     * multiple requests of the same URI template in the same way - e.g. monitor request made by {@link RestOperations}
+     * methods.
+     * <p>
+     * Use this in the situation when you have URI template with placeholders and URI variables separately.
+     * This method is useful when you have URI template with placeholders and only want to add query parameters based
+     * on this page to it.
+     * <p>
+     * Use {@link #getPageUri(UriComponentsBuilder)} if you want to get concrete page URI and don't have URI template.
      *
-     * @param offset page offset (position in the collection)
-     * @param limit  maximal number of returned elements (on a page)
+     * @param uriBuilder URI builder used for constructing page URI
+     * @return provided and updated builder instance
+     * @see RestOperations
      */
-    public PageRequest(final String offset, final int limit) {
-        this.offset = offset;
-        this.limit = limit;
-    }
-
-    /**
-     * Creates new page definition with limit and no offset (usually for the first page)
-     * @param limit maximal number of returned elements (on a page)
-     */
-    public PageRequest(final int limit) {
-        this(null, limit);
-    }
-
-
-    public String getOffset() {
-        return offset;
-    }
-
-    public void setOffset(final String offset) {
-        this.offset = offset;
-    }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    /**
-     * Return the limit value or the {@link #DEFAULT_LIMIT} if the limit is lower than or equal to zero
-     * @return sanitized limit
-     */
-    public int getSanitizedLimit() {
-        return limit > 0 ? limit : DEFAULT_LIMIT;
-    }
-
-    /**
-     * Return the {@link #getSanitizedLimit()} if lower than the given maximum or the maximum value
-     * @param max maximum value
-     * @return sanitized limit
-     */
-    public int getSanitizedLimit(final int max) {
-        final int limit = getSanitizedLimit();
-        return limit < max ? limit : max;
-    }
-
-    public void setLimit(final int limit) {
-        this.limit = limit;
-    }
-
-    @Override
-    public URI getPageUri(final UriComponentsBuilder uriBuilder) {
-        notNull(uriBuilder, "uriBuilder");
-        final UriComponentsBuilder copy = UriComponentsBuilder.fromUriString(uriBuilder.build().toUriString());
-        return updateWithPageParams(copy).build().toUri();
-    }
-
-    @Override
-    public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
-        if (offset != null) {
-            uriBuilder.replaceQueryParam("offset", offset);
-        }
-        uriBuilder.replaceQueryParam("limit", limit);
-        return uriBuilder;
-    }
-
-    @Override
-    public String toString() {
-        return GoodDataToStringBuilder.defaultToString(this);
-    }
-
-    protected boolean canEqual(final Object o) {
-        return o instanceof PageRequest;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PageRequest)) return false;
-
-        final PageRequest that = (PageRequest) o;
-        if (!(that.canEqual(this))) return false;
-
-        if (limit != that.limit) return false;
-        return offset != null ? offset.equals(that.offset) : that.offset == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = offset != null ? offset.hashCode() : 0;
-        result = 31 * result + limit;
-        return result;
-    }
+    UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder);
 }
