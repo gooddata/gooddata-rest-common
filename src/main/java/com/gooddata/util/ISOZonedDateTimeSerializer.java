@@ -11,21 +11,13 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
+
+import static com.gooddata.util.ISOZonedDateTime.FORMATTER;
 
 /**
- * Serializes JSR 310 {@link ZonedDateTime} fields to the ISO date time format in the UTC timezone ({@value ISOZonedDateTimeSerializer#DATE_TIME_PATTERN}).
+ * Serializes JSR 310 {@link ZonedDateTime} fields to the ISO date time format in the UTC timezone ({@value ISOZonedDateTime#DATE_TIME_PATTERN}).
  */
 public class ISOZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
-
-    /**
-     * Used Offset 'X' will output 'Z' when the offset to be output would be zero.
-     * @see DateTimeFormatter
-     */
-    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
-
-    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN).withZone(ZoneOffset.UTC);
 
     @Override
     public void serialize(ZonedDateTime value, JsonGenerator gen, SerializerProvider __) throws IOException {
