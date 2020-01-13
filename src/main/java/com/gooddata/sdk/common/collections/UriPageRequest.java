@@ -6,6 +6,7 @@
 package com.gooddata.sdk.common.collections;
 
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.MutableUri;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
@@ -40,11 +41,11 @@ class UriPageRequest implements PageRequest {
     /**
      * This is effectively no-op. Returns internal URI provided by REST API.
      *
-     * @param uriBuilder not used internally, can be null
+     * @param mutableUri not used internally, can be null
      * @return next page URI provided by REST API
      */
     @Override
-    public URI getPageUri(final UriComponentsBuilder uriBuilder) {
+    public URI getPageUri(final MutableUri mutableUri) {
         return pageUri.toUri();
     }
 
@@ -52,16 +53,16 @@ class UriPageRequest implements PageRequest {
      * {@inheritDoc}
      * <p>
      * Note that by using this method you might end up with URI that will be different from the one returned by
-     * {@link #getPageUri(UriComponentsBuilder)}. Method only copies query parameters and does not care about
+     * {@link #getPageUri(MutableUri)}. Method only copies query parameters and does not care about
      * URI path.
      */
     @Override
-    public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
-        notNull(uriBuilder, "uriBuilder");
+    public MutableUri updateWithPageParams(final MutableUri mutableUri) {
+        notNull(mutableUri, "mutableUri");
         for (Entry<String, List<String>> entry : pageUri.getQueryParams().entrySet()) {
-            uriBuilder.replaceQueryParam(entry.getKey(), entry.getValue().toArray());
+            mutableUri.replaceQueryParam(entry.getKey(), entry.getValue().toArray());
         }
-        return uriBuilder;
+        return mutableUri;
     }
 
     @Override

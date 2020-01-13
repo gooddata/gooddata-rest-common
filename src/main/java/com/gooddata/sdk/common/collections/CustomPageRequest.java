@@ -6,6 +6,7 @@
 package com.gooddata.sdk.common.collections;
 
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.MutableUri;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -96,19 +97,18 @@ public class CustomPageRequest implements PageRequest {
     }
 
     @Override
-    public URI getPageUri(final UriComponentsBuilder uriBuilder) {
-        notNull(uriBuilder, "uriBuilder");
-        final UriComponentsBuilder copy = UriComponentsBuilder.fromUriString(uriBuilder.build().toUriString());
-        return updateWithPageParams(copy).build().toUri();
+    public URI getPageUri(final MutableUri mutableUri) {
+        notNull(mutableUri, "mutableUri");
+        return updateWithPageParams(mutableUri.copy()).toUri();
     }
 
     @Override
-    public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
+    public MutableUri updateWithPageParams(final MutableUri mutableUri) {
         if (offset != null) {
-            uriBuilder.replaceQueryParam("offset", offset);
+            mutableUri.replaceQueryParam("offset", offset);
         }
-        uriBuilder.replaceQueryParam("limit", limit);
-        return uriBuilder;
+        mutableUri.replaceQueryParam("limit", limit);
+        return mutableUri;
     }
 
     @Override
