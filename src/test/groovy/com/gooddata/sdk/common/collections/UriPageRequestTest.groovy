@@ -5,14 +5,14 @@
  */
 package com.gooddata.sdk.common.collections
 
+
+import com.gooddata.sdk.common.util.SpringMutableUri
 import nl.jqno.equalsverifier.EqualsVerifier
 import org.springframework.web.util.UriComponents
-import org.springframework.web.util.UriComponentsBuilder
 import spock.lang.Specification
 
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.MatcherAssert.assertThat
-import static org.springframework.web.util.UriComponentsBuilder.fromUriString
 
 class UriPageRequestTest extends Specification {
 
@@ -37,11 +37,12 @@ class UriPageRequestTest extends Specification {
     def "should updateWithPageParams"() {
         given:
         UriPageRequest uri = new UriPageRequest('uri?offset=god&limit=10')
-        UriComponentsBuilder builder = fromUriString('/this/is/{template}').query('other=false')
+        SpringMutableUri mutableUri = new SpringMutableUri('/this/is/{template}')
+        mutableUri.replaceQueryParam('other', false)
 
         when:
-        uri.updateWithPageParams(builder)
-        UriComponents components = builder.build()
+        uri.updateWithPageParams(mutableUri)
+        UriComponents components = mutableUri.getUriComponents()
 
         then:
         components
@@ -49,11 +50,11 @@ class UriPageRequestTest extends Specification {
         components.queryParams == ['other': ['false'], 'offset': ['god'], 'limit': ['10']]
 
         and: "is idempotent operation"
-        uri.updateWithPageParams(builder)
-        uri.updateWithPageParams(builder)
+        uri.updateWithPageParams(mutableUri)
+        uri.updateWithPageParams(mutableUri)
 
         then:
-        builder.build() == components
+        mutableUri.getUriComponents() == components
     }
 
     def "should not double encode"() {

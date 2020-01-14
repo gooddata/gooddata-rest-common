@@ -5,9 +5,10 @@
  */
 package com.gooddata.sdk.common.collections
 
+import com.gooddata.sdk.common.util.MutableUri
+import com.gooddata.sdk.common.util.SpringMutableUri
 import nl.jqno.equalsverifier.EqualsVerifier
 import nl.jqno.equalsverifier.Warning
-import org.springframework.web.util.UriComponentsBuilder
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -35,7 +36,7 @@ class CustomPageRequestTest extends Specification {
     @Unroll
     def "should getPageUri with #type"() {
         when:
-        URI pageUri = pageRequest.getPageUri(UriComponentsBuilder.fromUriString('test_uri'))
+        URI pageUri = pageRequest.getPageUri(new SpringMutableUri('test_uri'))
 
         then:
         pageUri?.toString() == expected
@@ -50,18 +51,18 @@ class CustomPageRequestTest extends Specification {
     @Unroll
     def "should updateWithPageParams with #type offset"() {
         given:
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString('test_uri/{test}')
+        MutableUri mutableUri = new SpringMutableUri('test_uri/{test}')
         CustomPageRequest pageRequest = new CustomPageRequest(offset, 10)
 
         when:
-        UriComponentsBuilder updatedBuilder = pageRequest.updateWithPageParams(uriBuilder)
-        String pageUri = updatedBuilder.build().toUriString()
+        MutableUri updatedMutableUri = pageRequest.updateWithPageParams(mutableUri)
+        String pageUri = updatedMutableUri.toUriString()
 
         then:
         pageUri == 'test_uri/{test}?offset=12&limit=10'
 
         and: "is idempotent operation"
-        pageRequest.updateWithPageParams(updatedBuilder).build().toString() == pageUri
+        pageRequest.updateWithPageParams(updatedMutableUri).toUriString() == pageUri
 
         where:
         type     | offset
