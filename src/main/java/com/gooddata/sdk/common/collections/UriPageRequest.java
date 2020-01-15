@@ -31,11 +31,7 @@ class UriPageRequest implements PageRequest {
      * @param pageUri page URI
      */
     public UriPageRequest(final String pageUri) {
-        try {
-            this.pageUri = UriComponentsBuilder.fromUriString(UriUtils.decode(notNull(pageUri, "pageUri"), "UTF-8")).build();
-        } catch (final UnsupportedEncodingException e) {
-            throw new IllegalStateException(e);
-        }
+        this.pageUri = UriComponentsBuilder.fromUriString(UriUtils.decode(notNull(pageUri, "pageUri"), "UTF-8")).build();
     }
 
     /**

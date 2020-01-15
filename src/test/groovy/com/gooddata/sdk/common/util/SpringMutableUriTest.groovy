@@ -9,6 +9,9 @@ package com.gooddata.sdk.common.util
 import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
+
 class SpringMutableUriTest extends Specification {
 
     def "should copy"() {
@@ -43,6 +46,7 @@ class SpringMutableUriTest extends Specification {
     def "should verify equals"() {
         expect:
         EqualsVerifier.forClass(SpringMutableUri)
+                .withPrefabValues(Charset, StandardCharsets.UTF_8, StandardCharsets.US_ASCII)
                 .usingGetClass()
                 .verify()
     }

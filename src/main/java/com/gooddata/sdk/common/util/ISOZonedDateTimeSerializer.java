@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
-import static com.gooddata.util.ISOZonedDateTime.FORMATTER;
+import static com.gooddata.sdk.common.util.ISOZonedDateTime.FORMATTER;
 
 /**
  * Serializes JSR 310 {@link ZonedDateTime} fields to the ISO date time format in the UTC timezone ({@value ISOZonedDateTime#DATE_TIME_PATTERN}).
