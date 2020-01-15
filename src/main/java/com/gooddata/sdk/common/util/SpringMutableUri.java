@@ -5,6 +5,7 @@
  */
 package com.gooddata.sdk.common.util;
 
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -50,6 +51,11 @@ public class SpringMutableUri implements MutableUri {
     @Override
     public void replaceQueryParam(final String name, final Object... values) {
         builder.replaceQueryParam(name, values);
+    }
+
+    @Override
+    public void replaceQueryParams(final MultiValueMap<String, String> params) {
+        builder.replaceQueryParams(params);
     }
 
     @Override
