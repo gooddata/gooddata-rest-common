@@ -21,6 +21,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
  * Factory for ClientHttpRequest and AsyncClientHttpRequest objects.
  * The factory allows you to specify hostname and port for Spring REST client which by default requires absolute URI.
  */
+@SuppressWarnings("deprecation")
 public class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory, AsyncClientHttpRequestFactory {
 
     private final ClientHttpRequestFactory wrapped;
