@@ -7,6 +7,7 @@ package com.gooddata.sdk.common.util
 
 
 import nl.jqno.equalsverifier.EqualsVerifier
+import org.springframework.util.LinkedMultiValueMap
 import spock.lang.Specification
 
 import java.nio.charset.Charset
@@ -38,6 +39,20 @@ class SpringMutableUriTest extends Specification {
 
         when:
         mutableUri.replaceQueryParam('p', 'a', 2)
+
+        then:
+        mutableUri.toUri() == URI.create('/some/uri?p=a&p=2')
+    }
+
+    def "should replace query params"() {
+        given:
+        def mutableUri = new SpringMutableUri(URI.create('/some/uri?p=pval&q=qval'))
+        def replace = new LinkedMultiValueMap<String, String>()
+        replace.add('p', 'a')
+        replace.add('p', '2')
+
+        when:
+        mutableUri.replaceQueryParams(replace)
 
         then:
         mutableUri.toUri() == URI.create('/some/uri?p=a&p=2')

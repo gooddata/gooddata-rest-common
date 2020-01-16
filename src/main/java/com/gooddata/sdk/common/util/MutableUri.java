@@ -5,6 +5,8 @@
  */
 package com.gooddata.sdk.common.util;
 
+import org.springframework.util.MultiValueMap;
+
 import java.net.URI;
 
 /**
@@ -27,6 +29,13 @@ public interface MutableUri {
      * @param values query param values
      */
     void replaceQueryParam(final String name, final Object... values);
+
+    /**
+     * Replaces the query params.
+     *
+     * @param params query params to replace
+     */
+    void replaceQueryParams(final MultiValueMap<String, String> params);
 
     /**
      * URI created from current state of this instance.
