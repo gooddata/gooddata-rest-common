@@ -18,9 +18,9 @@ The *GoodData REST Common* is available in Maven Central Repository, to use it f
 ### Dependencies
 
 The *GoodData REST Common* uses:
-* the *Spring Framework* version 4.3.*
-* the *Jackson JSON Processor* version 2.8.*
-* the *Java Development Kit (JDK)* version 8 or later
+* the *Spring Framework* version 5.*
+* the *Jackson JSON Processor* version 2.10.*
+* the *Java Development Kit (JDK)* version 11 or later to build, can run on 8 and later
 
 ## Development
 
