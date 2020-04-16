@@ -11,7 +11,7 @@ The *GoodData REST Common* is available in Maven Central Repository, to use it f
 <dependency>
     <groupId>com.gooddata</groupId>
     <artifactId>gooddata-rest-common</artifactId>
-    <version>2.0.0-RC.3</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
