@@ -6,6 +6,7 @@
 package com.gooddata.sdk.common.util;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.ZonedDateTime;
 
@@ -15,7 +16,7 @@ class GDZonedDateTimeClass {
     private final ZonedDateTime date;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public GDZonedDateTimeClass(final ZonedDateTime date) {
+    public GDZonedDateTimeClass(@JsonProperty("date") final ZonedDateTime date) {
         this.date = date;
     }
 

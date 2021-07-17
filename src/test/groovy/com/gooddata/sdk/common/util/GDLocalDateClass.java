@@ -6,6 +6,7 @@
 package com.gooddata.sdk.common.util;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
@@ -15,7 +16,7 @@ public class GDLocalDateClass {
     private final LocalDate date;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public GDLocalDateClass(final LocalDate date) {
+    public GDLocalDateClass(@JsonProperty("date") final LocalDate date) {
         this.date = date;
     }
 
