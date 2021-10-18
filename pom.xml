@@ -41,7 +41,7 @@
     <properties>
         <jackson.version>2.12.4</jackson.version>
         <jackson.databind.version>2.12.4</jackson.databind.version>
-        <spring.version>5.3.9</spring.version>
+        <spring.version>5.3.10</spring.version>
         <json-unit.version>2.27.0</json-unit.version>
     </properties>
 
