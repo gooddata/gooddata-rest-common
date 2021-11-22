@@ -88,7 +88,7 @@ class CustomPageRequestTest extends Specification {
 
     def "should have correct toString"() {
         expect:
-        new CustomPageRequest(1, 2).toString() == 'CustomPageRequest[offset=1,limit=2]'
+        new CustomPageRequest(1, 2).toString() ==~ /CustomPageRequest\[(offset=1|limit=2),(offset=1|limit=2)]/
     }
 
     def "should verify equals"() {

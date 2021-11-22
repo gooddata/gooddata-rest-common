@@ -24,9 +24,16 @@ class GoodDataToStringBuilderTest extends Specification {
     }
 
     def "test default toString recursive"() {
+        given:
+        def toString = new TestClass().toString()
+
         expect:
-        new TestClass().toString() ==
-                "${OUTER_CLASS_NAME}.$TEST_CLASS_NAME[stringField=$STRING_FIELD_VALUE,longField=$LONG_FIELD_VALUE,list=${LIST_VALUE.toString()},anotherTestClass=$ANOTHER_TEST_CLASS_STRING_EXPECTED]"
+        toString ==~ /$OUTER_CLASS_NAME\.$TEST_CLASS_NAME\[.*]/
+        toString.contains("stringField=$STRING_FIELD_VALUE")
+        toString.contains("longField=$LONG_FIELD_VALUE")
+        toString.contains("list=${LIST_VALUE.toString()}")
+        toString.contains("anotherTestClass=$ANOTHER_TEST_CLASS_STRING_EXPECTED")
+        toString.length() == 179
     }
 
     def "test toString include additional param"() {
