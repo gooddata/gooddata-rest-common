@@ -41,7 +41,7 @@
     <properties>
         <jackson.version>2.13.3</jackson.version>
         <jackson.databind.version>2.13.3</jackson.databind.version>
-        <spring.version>5.3.21</spring.version>
+        <spring.version>6.0.4</spring.version>
         <json-unit.version>2.35.0</json-unit.version>
         <sonar.organization>gooddata-github</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
