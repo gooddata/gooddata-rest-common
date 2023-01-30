@@ -39,7 +39,7 @@
     </developers>
 
     <properties>
-        <jackson.version>2.13.3</jackson.version>
+        <jackson.version>2.14.2</jackson.version>
         <jackson.databind.version>2.13.3</jackson.databind.version>
         <spring.version>5.3.21</spring.version>
         <json-unit.version>2.35.0</json-unit.version>
