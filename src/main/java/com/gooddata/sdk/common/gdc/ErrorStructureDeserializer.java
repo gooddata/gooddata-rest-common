@@ -7,6 +7,7 @@ package com.gooddata.sdk.common.gdc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -38,7 +39,7 @@ class ErrorStructureDeserializer extends JsonDeserializer<ErrorStructure> {
                 clazz = DefaultDeserializerErrorStructure.class;
             }
         } else {
-            throw ctxt.mappingException("Unknown type of ErrorStructure");
+	    throw JsonMappingException.from(ctxt, "Unknown type of ErrorStructure");
         }
 
         final JsonParser nextParser = tokenBuffer.asParser();

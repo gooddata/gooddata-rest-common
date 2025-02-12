@@ -91,4 +91,15 @@ public class UriPrefixer {
         notEmpty(uri, "uri");
         return mergeUris(URI.create(uri));
     }
+     
+    /**
+     * Prefix the given URI with the URI prefix.
+     *
+     * @param uri the URI to prefix
+     * @return the prefixed URI
+     */
+    public URI prefixUri(URI uri) {
+        return mergeUris(uri); // Use existing merging logic
+    }
+
 }
