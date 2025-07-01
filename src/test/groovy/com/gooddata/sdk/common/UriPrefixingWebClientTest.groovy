@@ -6,45 +6,26 @@
 package com.gooddata.sdk.common
 
 import org.springframework.http.HttpMethod
-import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.http.client.SimpleClientHttpRequestFactory
 import spock.lang.Shared
 import spock.lang.Specification
 
-class UriPrefixingWebClientTest extends Specification {
+class UriPrefixingClientHttpRequestFactoryTest extends Specification {
 
     @Shared
-    def webClientBuilder = WebClient.builder()
+    def WRAPPED = new SimpleClientHttpRequestFactory()
 
     def "should create prefixed request"() {
-        given:
-        def prefixer = new UriPrefixer('http://localhost:1234')
-        def requestFactory = new UriPrefixingWebClient(webClientBuilder, prefixer)
-
         when:
-        def uri = prefixer.prefixUri(URI.create('/gdc/resource'))
+        def request = requestFactory.createRequest(URI.create('/gdc/resource'), HttpMethod.GET)
 
         then:
-        uri.toString() == 'http://localhost:1234/gdc/resource'
-    }
+        request.URI.toString() == 'http://localhost:1234/gdc/resource'
 
-    def "should handle invalid URI gracefully"() {
-        given:
-        def prefixer = new UriPrefixer('http://localhost:1234')
-        def requestFactory = new UriPrefixingWebClient(webClientBuilder, prefixer)
-
-        when:
-        requestFactory.createRequest('/invalid uri', HttpMethod.GET)
-
-        then:
-        thrown(IllegalArgumentException)
-    }
-
-    def "should handle multiple constructors of UriPrefixer"() {
-        when:
-        def prefixer1 = new UriPrefixer('http://localhost:1234')
-        def prefixer2 = new UriPrefixer(URI.create('http://localhost:1234'))
-
-        then:
-        prefixer1.getUriPrefix() == prefixer2.getUriPrefix()
+        where:
+        requestFactory << [
+            new UriPrefixingClientHttpRequestFactory(WRAPPED, 'http', 'localhost', 1234),
+            new UriPrefixingClientHttpRequestFactory(WRAPPED, 'http://localhost:1234')
+        ]
     }
 }
